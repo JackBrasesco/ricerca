@@ -602,7 +602,13 @@ document.querySelector("#use-mic").onclick = function() {
         rafCall = requestAnimationFrame(MusicVisuals.start);
   }
 }
-}}
+}
+var soundAllowed = function () {
+  console.log('D:')
+}
+
+navigator.getUserMedia({audio:true}, soundAllowed, soundNotAllowed);
+}
 
 function getInfoFromFileName(name) {
   name = name == null ? 'Unknown' : name;
