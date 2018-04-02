@@ -249,6 +249,7 @@ h1 {
           <button id="switch-color">Switch color</button>
           <button id="loop-color">Loop color</button>
           <button id="open-file">Open file</button>
+          <button id="use-mic">Use Mic</button>
           <button id="show-audio">Show Track</button>
       	  </div>
         	<div class="right">
@@ -530,6 +531,74 @@ document.querySelector('#loop-color').onclick = function() {
    inc = 10000000
    firstTap = true
  }
+}
+
+document.querySelector("#use-mic").onclick = function() {
+  "use strict";
+  var soundAllowed = function (stream) {
+    window.persistAudioStream = stream;
+    var audioContext = new window.AudioContext();
+    var audioStream = audioContent.createMediaStreamSource( stream );
+
+    analyser = audioContext.createAnalyser();
+
+    audioStream.connect(analyser);
+    analyser.connect(audioContext.destination);
+    analyser.fftSize = 4096;
+    analyser.minDecibels = -90;
+    analyser.maxDecibels = 0;
+
+    bufferLength = analyser.frequencyBinCount;
+    frequencyData = new Uint8Array(bufferLength);
+
+    var MusicVisuals = {
+      call: null,
+      start: function start() {
+        canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+        analyser.getByteFrequencyData(frequencyData);
+
+        var frequencyWidth = window.devicePixelRatio,
+            frequencyHeight = 0,
+            x = 0,
+            scales = [],
+            fd = [];
+
+        var fdMin = Math.min.apply(Math, frequencyData);
+        var fdMax = Math.max.apply(Math, frequencyData);
+
+        for (var increment = 0; x < canvas.width; increment++) {
+          frequencyHeight = frequencyData[increment] * (canvas.height / 250);
+
+          if (increment < 15) {
+            scales.push(frequencyHeight / 50);
+          }
+
+          fd.push(frequencyData[increment]);
+          frequencyHeight = ScaleBar.get(fdMin, fdMax, frequencyData[increment]);
+          frequencyHeight = frequencyData[increment];
+          canvasContext.fillStyle = color;
+
+          var y = canvas.height - frequencyHeight;
+
+          y = y > canvas.height - 1 ? canvas.height - 1 : y;
+          y = y < 0 ? 0 : y;
+
+          canvasContext.fillRect(x, y, frequencyWidth, canvas.height);
+          x += frequencyWidth * 3;
+        }
+
+        var scale = scales.reduce(function (pv, cv) {
+          return pv + cv;
+        }, 0) / scales.length * 0.5;
+
+        scale = scale < 1 ? 1 : scale;
+        scale = scale > 3 ? 3 : scale;
+
+
+        circle.style.transform = 'scale(' + frequencyData[5] * 0.025 + ')'
+
+        rafCall = requestAnimationFrame(MusicVisuals.start);
+  }
 }
 
 function getInfoFromFileName(name) {
