@@ -538,7 +538,24 @@ document.querySelector("#use-mic").onclick = function() {
   "use strict";
   var soundAllowed = function (stream) {
     console.log("hi")
+
     window.persistAudioStream = stream;
+    var canvas = void 0,
+        canvasContext = void 0,
+        analyser = void 0,
+        rafCall = void 0,
+        bufferLength = void 0,
+        frequencyData = void 0,
+        circle = void 0;
+
+    canvas = document.querySelector('.music-visuals');
+    circle = document.querySelector('.vis-circle');
+
+    canvasContext = canvas.getContext('2d');
+
+    canvas.width = canvas.offsetWidth * window.devicePixelRatio;
+    canvas.height =canvas.offsetHeight * window.devicePixelRatio;
+
     var audioContext = new window.AudioContext();
     var audioStream = audioContext.createMediaStreamSource( stream );
 
