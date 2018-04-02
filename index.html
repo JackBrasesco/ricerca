@@ -540,7 +540,7 @@ document.querySelector("#use-mic").onclick = function() {
     console.log("hi")
     window.persistAudioStream = stream;
     var audioContext = new window.AudioContext();
-    var audioStream = audioContent.createMediaStreamSource( stream );
+    var audioStream = audioContext.createMediaStreamSource( stream );
 
     analyser = audioContext.createAnalyser();
 
