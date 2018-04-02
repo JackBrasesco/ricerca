@@ -570,7 +570,7 @@ document.querySelector("#use-mic").onclick = function() {
     bufferLength = analyser.frequencyBinCount;
     frequencyData = new Uint8Array(bufferLength);
 
-    var MusicVisuals = {
+    var MusicVisuals2 = {
       call: null,
       start: function start() {
         canvasContext.clearRect(0, 0, canvas.width, canvas.height);
@@ -616,8 +616,9 @@ document.querySelector("#use-mic").onclick = function() {
 
         circle.style.transform = 'scale(' + frequencyData[5] * 0.025 + ')'
 
-        rafCall = requestAnimationFrame(MusicVisuals.start);
+        rafCall = requestAnimationFrame(MusicVisuals2.start);
   }
+  MusicVisuals2.start
 }
 }
 var soundNotAllowed = function () {
